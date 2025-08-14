@@ -1,25 +1,18 @@
 // components/layout/Header.js
 
 import Link from 'next/link';
-import { Search, UserCircle, PlusCircle, LogOut } from 'lucide-react';
+import { PlusCircle, LogOut } from 'lucide-react';
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useRouter } from 'next/router';
 
 const Header = () => {
-  const user = useUser(); // Hook para pegar o usuário logado
+  const user = useUser();
   const supabaseClient = useSupabaseClient();
   const router = useRouter();
 
   const handleLogout = async () => {
     await supabaseClient.auth.signOut();
     router.push('/'); // Redireciona para a home após o logout
-  };
-
-  // Função para redirecionar para a página de login do Supabase
-  const handleLogin = () => {
-    supabaseClient.auth.signInWithOAuth({
-      provider: 'google', // Você pode usar outros, como 'github', 'facebook', etc.
-    });
   };
 
   return (
@@ -49,13 +42,19 @@ const Header = () => {
               </button>
             </>
           ) : (
-            // Se o usuário NÃO ESTIVER logado
-            <button
-              onClick={handleLogin}
-              className="rounded-md bg-accent px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-hover"
-            >
-              Fazer Login com Google
-            </button>
+            // Se o usuário NÃO ESTIVER logado (ESTA PARTE FOI ALTERADA)
+            <>
+              <Link href="/login">
+                <span className="rounded-md border border-accent px-4 py-2 text-sm font-medium text-accent transition-colors hover:bg-accent hover:text-white">
+                  Login
+                </span>
+              </Link>
+              <Link href="/register">
+                <span className="rounded-md bg-accent px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-hover">
+                  Cadastre-se
+                </span>
+              </Link>
+            </>
           )}
         </div>
       </div>
